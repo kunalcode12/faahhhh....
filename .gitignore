@@ -1,0 +1,33 @@
+# Python
+backend/env/
+backend/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.tmp
+
+# Node / Next.js (see also frontend/.gitignore)
+node_modules/
+.next/
+
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Deploy tooling
+.vercel
+
+docs/
+# Personal presentation notes (not part of the submission)
+presentation/

@@ -1,0 +1,13 @@
+# Keep CLI uploads lean: local environments, build output and caches never ship.
+backend/env/
+backend/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+backend/tests/
+backend/scripts/
+**/node_modules/
+**/.next/
+frontend/tests/
+docs/

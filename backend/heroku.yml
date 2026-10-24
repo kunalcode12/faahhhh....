@@ -1,0 +1,6 @@
+# Heroku container deploy for the API (alternative to Vercel).
+# From the repo root:  git subtree push --prefix backend heroku main
+# Heroku sets $PORT; the Dockerfile's CMD picks it up.
+build:
+  docker:
+    web: Dockerfile
