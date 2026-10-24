@@ -14,7 +14,10 @@ The data is limited to what the brief allows: national wind outturn (Elexon `FUE
 forecasts (Elexon `WINDFOR`), for purchase decisions made in January 2026. A decision on day X buys
 power for day X+1, so that means **delivery days 2 January to 1 February 2026**.
 
-**Live app:** _add the Vercel URL here once deployed (see [Deploying](#deploying))_
+**Live app:** https://beaufort-tau.vercel.app · **API docs:** https://beaufort-api-u9j4.onrender.com/api/docs
+
+The API runs on Render's free plan, which sleeps when idle. If nobody has used it for a while, the
+first page load can take about a minute while it wakes up.
 
 ![Day-ahead view](docs/images/day-ahead.png)
 

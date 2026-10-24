@@ -4,8 +4,9 @@ import { Suspense } from "react";
 import { DayAheadSkeleton } from "@/components/day-ahead/day-ahead-skeleton";
 import { DayAheadView } from "@/components/day-ahead/day-ahead-view";
 
+// The layout's "%s · Beaufort" template only applies to child segments, not this page.
 export const metadata: Metadata = {
-  title: "Day-ahead",
+  title: { absolute: "Day-ahead · Beaufort" },
 };
 
 /**
