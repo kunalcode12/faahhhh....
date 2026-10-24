@@ -15,6 +15,7 @@ import { DayProfileChart } from "../charts/day-profile-chart";
 import { ErrorPanel } from "../ui/error-panel";
 import { SectionBoundary } from "../ui/section-boundary";
 import { Skeleton } from "../ui/skeleton";
+import { SlowLoadHint } from "../ui/slow-load-hint";
 import { DaySummarySkeleton } from "./day-ahead-skeleton";
 import { DayControls } from "./day-controls";
 import { DaySummary } from "./day-summary";
@@ -89,6 +90,7 @@ export function DayAheadView() {
 
       {day.isPending ? (
         <>
+          <SlowLoadHint />
           <DaySummarySkeleton />
           <Skeleton className="h-[520px] rounded-3xl" />
         </>

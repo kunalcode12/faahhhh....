@@ -2,7 +2,9 @@ import type { z } from "zod";
 
 import { ApiError } from "./errors";
 
-const DEFAULT_TIMEOUT_MS = 15_000;
+// Longer than the proxy's 25 s budget (app/api/[...path]/route.ts), so a backend that is
+// waking from sleep gets a clean answer from the proxy instead of a browser-side abort.
+const DEFAULT_TIMEOUT_MS = 30_000;
 
 export type QueryParams = Record<string, string | number | null | undefined>;
 

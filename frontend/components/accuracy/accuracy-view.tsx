@@ -22,6 +22,7 @@ import { SeriesChart } from "../charts/series-chart";
 import { ErrorPanel } from "../ui/error-panel";
 import { QuerySection } from "../ui/query-section";
 import { SectionBoundary } from "../ui/section-boundary";
+import { SlowLoadHint } from "../ui/slow-load-hint";
 import { AccuracyControls } from "./accuracy-controls";
 import { AccuracyHeadlineSkeleton } from "./accuracy-skeleton";
 import { AccuracyHeadline, InsightList } from "./accuracy-summary";
@@ -126,7 +127,10 @@ export function AccuracyView() {
       />
 
       {summary.isPending ? (
-        <AccuracyHeadlineSkeleton />
+        <>
+          <SlowLoadHint />
+          <AccuracyHeadlineSkeleton />
+        </>
       ) : summary.isError ? (
         <ErrorPanel error={summary.error} onRetry={() => void summary.refetch()} retrying={summary.isFetching} />
       ) : (

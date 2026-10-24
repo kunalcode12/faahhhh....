@@ -1,0 +1,25 @@
+# Render Blueprint for the API: backend/Dockerfile on Render's free plan.
+# Render dashboard → New → Blueprint → pick this repository → Apply.
+# The frontend is deployed separately on Vercel (Root Directory: frontend, BACKEND_URL = this URL).
+services:
+  - type: web
+    name: beaufort-api
+    runtime: docker
+    plan: free
+    region: frankfurt # closest to the UK
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/health/ready
+    autoDeployTrigger: commit
+    # Only rebuild when the backend changes, not on frontend or docs commits.
+    buildFilter:
+      paths:
+        - backend/**
+      ignoredPaths:
+        - backend/tests/**
+    envVars:
+      # The free plan has 0.1 CPU: one worker starts fastest and is plenty.
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: LOG_JSON
+        value: "true"

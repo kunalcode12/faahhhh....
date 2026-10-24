@@ -113,7 +113,7 @@ pytest --cov                     # 81 tests, 98% coverage
 
 # frontend
 cd frontend
-npm run check                    # eslint + typecheck + 39 tests
+npm run check                    # eslint + typecheck + 46 tests
 npm run build
 ```
 
@@ -139,7 +139,7 @@ stack. `make check` does the same locally on macOS/Linux.
 │   ├── tests/                   unit tests, API tests, golden-number tests on the real data
 │   ├── scripts/loadtest.py      small load generator
 │   ├── main.py                  shim so `uvicorn main:app` also works
-│   ├── Dockerfile, heroku.yml   container image and Heroku config
+│   ├── Dockerfile               container image (Docker Compose and Render)
 │   ├── pyproject.toml           project metadata, ruff/mypy/pytest config
 │   ├── requirements.txt         pinned runtime dependencies (requirements-dev.txt adds tools)
 │   └── .env.example             every setting, with defaults
@@ -166,7 +166,8 @@ stack. `make check` does the same locally on macOS/Linux.
 │   ├── architecture.excalidraw  hand-drawn system diagram (open it at excalidraw.com)
 │   └── images/                  screenshots
 ├── docker-compose.yml           the whole stack locally
-├── vercel.json                  Vercel deployment: frontend and backend in one project
+├── render.yaml                  Render deployment of the backend (free plan, Docker)
+├── vercel.json                  alternative: frontend and backend in one Vercel project
 ├── Makefile                     shortcuts for macOS/Linux
 └── .github/workflows/ci.yml     CI pipeline
 ```
@@ -188,30 +189,35 @@ All under `/api`, documented at `/api/docs`. Responses are JSON, errors are
 
 ## Deploying
 
-### Vercel (recommended)
+The live setup is the **backend on Render** (free plan, Docker) and the **frontend on Vercel**.
 
-`vercel.json` uses [Vercel Services](https://vercel.com/docs/services) to deploy both apps as one
-project on one domain: `/api/*` goes to FastAPI, everything else to Next.js.
+### Backend on Render
 
-1. Put this folder in a GitHub repo (one repo for both apps).
-2. In Vercel: *Add New → Project*, import the repo, and leave the Root Directory at the repo root.
-3. Deploy. No environment variables are needed: the API loads the bundled snapshot.
+`render.yaml` is a Render Blueprint. It builds `backend/Dockerfile` and runs it on the free plan in
+Frankfurt, with `/api/health/ready` as the health check.
 
-Services were in beta when I set this up. If your account doesn't have them, use two projects from
-the same repo instead:
+1. In Render: *New → Blueprint*, connect GitHub and pick this repo, then *Apply*.
+2. When the deploy is live, `https://<your-service>.onrender.com/api/health/ready` should return
+   `{"status":"ready", ...}`.
 
-- **API**: Root Directory `backend`. Vercel picks up FastAPI from `pyproject.toml` (`[tool.vercel]`).
-- **Web**: Root Directory `frontend`, with the environment variable `BACKEND_URL` set to the API
-  project's URL.
+### Frontend on Vercel
 
-### Heroku (API only)
+1. *Add New → Project*, import the same repo, and set the **Root Directory to `frontend`**.
+2. Add the environment variable `BACKEND_URL` = the Render URL (no trailing slash).
+3. Deploy.
 
-```bash
-heroku create my-beaufort-api --stack container
-git subtree push --prefix backend heroku main
-```
+The frontend's `/api/*` route forwards to `BACKEND_URL`, so the browser never talks to Render
+directly and there's no CORS to configure.
 
-Then set the frontend's `BACKEND_URL` to the Heroku app URL.
+**About the free plan:** Render puts the backend to sleep after 15 minutes without traffic, and the
+first request afterwards takes about a minute. The proxy waits and retries while it wakes, and the
+page tells the user what's happening, so a cold start shows a slow load rather than an error.
+
+### Alternative: everything on Vercel
+
+`vercel.json` also describes a single Vercel project using
+[Vercel Services](https://vercel.com/docs/services): `/api/*` to FastAPI, everything else to Next.js.
+To use it, import the repo with the Root Directory left at the repo root.
 
 ## Decisions worth knowing about
 

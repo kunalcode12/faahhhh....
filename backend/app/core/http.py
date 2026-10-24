@@ -222,7 +222,6 @@ class HttpCacheMiddleware:
         cacheable = self.bodies is not None and scope["method"] == "GET"
         if cacheable and self.bodies is not None and (hit := self.bodies.get(etag)):
             headers, body = hit
-            
             await send({"type": "http.response.start", "status": 200, "headers": list(headers)})
             await send({"type": "http.response.body", "body": body})
             return

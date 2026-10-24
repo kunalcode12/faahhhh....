@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     cors_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:3000"]
     )
-    # Behind Vercel / Heroku / a load balancer the client IP is in X-Forwarded-For.
+    # Behind Render / Vercel / a load balancer the client IP is in X-Forwarded-For.
     trust_proxy_headers: bool = True
     # Per-client token bucket. 0 disables rate limiting.
     rate_limit_per_minute: int = Field(default=600, ge=0)

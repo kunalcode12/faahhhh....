@@ -54,6 +54,12 @@ export function describeError(error: unknown): ErrorCopy {
       return { title: "The data service is down", message: "We couldn't reach it; it may be restarting. Try again in a moment.", requestId };
     case "upstream_timeout":
       return { title: "The data service is slow", message: error.message, requestId };
+    case "upstream_waking":
+      return {
+        title: "The data service is waking up",
+        message: "It sleeps when nobody is using it and takes about a minute to start. Try again in a moment.",
+        requestId,
+      };
     case "rate_limited":
       return { title: "Too many requests", message: "Slow down a little; retrying shortly.", requestId };
     case "dataset_unavailable":

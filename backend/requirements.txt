@@ -1,4 +1,4 @@
-# Runtime dependencies, pinned for reproducible Docker / Vercel / Heroku builds.
+# Runtime dependencies, pinned for reproducible Docker / Render / Vercel builds.
 # The loose ranges live in pyproject.toml; bump these together.
 fastapi==0.161.1
 uvicorn[standard]==0.54.0
