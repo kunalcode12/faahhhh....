@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Every colour in the app comes from here, so light and dark
+ * mode swap in one place. Chart series colours are fixed per entity across the
+ * whole app (Actual = blue, NESO forecast = orange, Calibrated = aqua) and were
+ * checked for colour-blind separation and contrast in both modes.
+ */
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-2: #f1f0ec;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --line: rgb(11 11 11 / 0.1);
+
+  --actual: #2a78d6;
+  --forecast: #eb6834;
+  --calibrated: #1baf7a;
+  --band: rgb(27 175 122 / 0.14);
+  --deemph: #c3c2b7;
+  --deemph-2: #e1e0d9;
+
+  --good: #0ca30c;
+  --good-ink: #006300;
+  --warning: #fab219;
+  --critical: #d03b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-2: #242422;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --line: rgb(255 255 255 / 0.1);
+
+    --actual: #3987e5;
+    --forecast: #d95926;
+    --calibrated: #199e70;
+    --band: rgb(25 158 112 / 0.2);
+    --deemph: #5c5b56;
+    --deemph-2: #383835;
+
+    --good-ink: #0ca30c;
+  }
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-grid: var(--grid);
+  --color-line: var(--line);
+  --color-actual: var(--actual);
+  --color-forecast: var(--forecast);
+  --color-calibrated: var(--calibrated);
+  --color-deemph: var(--deemph);
+  --color-good: var(--good);
+  --color-good-ink: var(--good-ink);
+  --color-warning: var(--warning);
+  --color-critical: var(--critical);
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  background: var(--page);
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Numbers that line up in columns (tables, axis ticks) use tabular figures;
+   big standalone numbers keep proportional ones. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--actual);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.45), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  .skeleton::after {
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.06), transparent);
+  }
+}
+
+/* Thin indeterminate bar shown while queries refetch in the background */
+@keyframes progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.progress-bar {
+  animation: progress 1.1s ease-in-out infinite;
+}
+
+/* Gentle entrance for freshly loaded sections */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Recharts: keep focus rings on the chart wrapper, not on every SVG node */
+.recharts-wrapper:focus,
+.recharts-surface:focus {
+  outline: none;
+}
+
+/* Native range input styled to the design system */
+input[type="range"] {
+  accent-color: var(--ink);
+}
